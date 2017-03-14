@@ -1,5 +1,5 @@
 [gerrit]
-host=review.lineageos.org
-project=LineageOS/lineageos_updater
+host=gerrit.unlegacy-android.org
+project=Unlegacy-Android/unlegacy-downloads
 port=29418
 defaultbranch=master

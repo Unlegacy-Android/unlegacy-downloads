@@ -17,7 +17,7 @@ import requests
 import sys
 import time
 
-os.environ['TZ'] = 'UTC'
+os.environ['TZ'] = 'GMT'
 
 app = Flask(__name__)
 app.config.from_pyfile('app.cfg')
@@ -112,7 +112,8 @@ def index(device, romtype, incrementalversion):
             "romtype": rom.romtype,
             "datetime": int(time.mktime(rom.datetime.timetuple())),
             "version": rom.version,
-            "filename": rom.filename
+            "filename": rom.filename,
+            "md5": rom.md5sum
         })
     return jsonify({'response': data})
 
@@ -174,9 +175,16 @@ def changes(device='all', before=-1):
         device = None
     return jsonify(get_changes(gerrit, device, before))
 
+@app.route('/')
+@cache.cached(timeout=3600)
+def list_latest_builds():
+    devices = sorted([x for x in Device.get_devices() if x['model'] in Rom.get_devices()], key=lambda device: device['name'])
+    oems = sorted(list(set([x['oem'] for x in devices])))
+    roms = Rom.get_roms(before=app.config['BUILD_SYNC_TIME'])
+    return render_template('list.html', roms=roms, oems=oems, devices=devices, get_timestamp=get_timestamp)
+
 @app.route('/<device>/changes/<int:before>/')
 @app.route('/<device>/changes/')
-@app.route('/')
 @cache.cached(timeout=3600)
 def show_changelog(device='all', before=-1):
     devices = sorted([x for x in Device.get_devices() if x['model'] in Rom.get_devices()], key=lambda device: device['name'])
@@ -211,7 +219,7 @@ def web_device(device):
     active_oem = [x['oem'] for x in devices if x['model'] == device]
     active_oem = active_oem[0] if active_oem else None
 
-    return render_template("device.html", active_oem=active_oem, active_device=device, oems=oems, devices=devices, roms=roms, get_timestamp=get_timestamp)
+    return render_template("list.html", active_oem=active_oem, active_device=device, oems=oems, devices=devices, roms=roms, get_timestamp=get_timestamp)
 
 @app.route("/extras")
 @cache.cached(timeout=3600)

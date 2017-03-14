@@ -1,6 +1,7 @@
-LineageOS Updater Backend
+Unlegacy Android Updater Backend
 =======================
 Copyright (c) 2017 The LineageOS Project<br>
+Copyright (c) 2017 Unlegacy Android<br>
 
 Adding a new device
 ---

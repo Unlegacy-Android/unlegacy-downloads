@@ -1,102 +1,65 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <title>LineageOS Downloads</title>
-        <link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
-        <link rel="stylesheet" href="/static/site.css">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <link rel="icon" sizes="16x16 32x32" href="static/favicons/favicon.ico">
-        <!--[if IE]><link rel="shortcut icon" href="static/favicons/favicon.ico"><![endif]-->
-        <link rel="apple-touch-icon-precomposed" href="static/favicons/favicon-152.png">
-        <meta name="theme-color" content="#167C80">
-        <meta name="msapplication-TileColor" content="#167C80">
-        <meta name="msapplication-TileImage" content="static/favicons/favicon-144.png">
-    </head>
-    <body>
-        <nav>
-            <div class="nav-wrapper">
-                <a href="#!" class="brand-logo center">LineageOS Downloads</a>
-                <ul id="slide-out" class="side-nav fixed">
-                    <li>
-                        <div class="userView">
-                            <div class="background">
-                                <img src="/static/iconoclast.png">
-</div>
-                            <a href="#!user"><img class="logo circle" src="/static/logo.png" height=128px width=128px /></a>
-                            <a href="#!name"><span class="white-text name">Devices</span></a>
-                        </div>
-                    </li>
-                    {% for oem in oems %}
-                    <li class="no-padding">
-                        <ul class="collapsible collapsible-accordian">
-                            <li class="bold">
-                                {% if oem == active_oem %}
-                                <a class="collapsible-header waves-effect waves-teal bold active">{{oem}}</a>
-                                {% else %}
-                                <a class="collapsible-header waves-effect waves-teal bold">{{oem}}</a>
-                                {% endif %}
-                                <div class="collapsible-body">
-                                    <ul>
-                                        {% for device in devices %}
-                                        {% if device.oem == oem %}
-                                        {% if device.model == active_device %}
-                                        <li class="active grey darken-2"><a href="/{{device.model}}">{{device.name}} ({{device.model}})</a></li>
-                                        {% else %}
-                                        <li ><a href="/{{device.model}}">{{device.name}} ({{device.model}})</a></li>
-                                        {% endif %}
-                                        {% endif %}
-                                        {% endfor %}
-                                    </ul>
-                                </div>
-                            </li>
-                        </ul>
-                    </li>
-                    {% endfor %}
-                    <li class="no-padding">
-                        <ul class="collapsible collapsible-accordian">
-                            <li class="bold">
-                                {% if extras %}
-                                <a class="collapsible-header waves-effect waves-teal bold active" href="/extras">Extras</a>
-                                {% else %}
-                                <a class="collapsible-header waves-effect waves-teal bold" href="/extras">Extras</a>
-                                {% endif %}
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-                <a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a>
-            </div>
+<html class="mdl-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <title>Unlegacy Android Builds</title>
+  <meta name="description" content="Unlegacy Android downloads portal.">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css">
+  <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.yellow-orange.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+  <script defer src="https://material.io/guidelines/static/default/js/main.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <header class="mdl-layout__header">
+      <div class="mdl-layout__header-row">
+        <span class="mdl-layout-title"><b>Unlegacy Android Builds</b></span>
+        <div class="mdl-layout-spacer"></div>
+        <nav class="mdl-navigation mdl-layout--large-screen-only">
+          <!--a class="mdl-navigation__link" href="/extras">Extras</a-->
         </nav>
-        <main>
+      </div>
+    </header>
+    <div class="mdl-layout__drawer">
+      <span class="mdl-layout-title" style="padding-left:20"><b>Devices</b></span>
+      <nav class="mdl-navigation">
+        <a class="mdl-navigation__link" href="/"><b>Latest Builds</b></a>
+        {% for oem in oems %}
+        <div>
+          {% if oem == active_oem %}
+          <a class="mdl-navigation__link qp-ui goog-zippy-expanded" data-qp-ui="{ 'SideNavZippy': true }" style="cursor: pointer; cursor: hand;"><b>{{oem}}</b></a>
+          {% else %}
+          <a class="mdl-navigation__link qp-ui goog-zippy-collapsed" data-qp-ui="{ 'SideNavZippy': false }" style="cursor: pointer; cursor: hand;"><b>{{oem}}</b></a>
+          {% endif %}
+          <div>
+          {% for device in devices %}
+          {% if device.oem == oem %}
+          {% if device.model == active_device %}
+          <a id="{{device.model}}" class="mdl-navigation__link nav_selected" href="/{{device.model}}">{{device.model}}</a>
+          {% else %}
+          <a id="{{device.model}}" class="mdl-navigation__link" href="/{{device.model}}">{{device.model}}</a>
+          {% endif %}
+          <div class="mdl-tooltip mdl-tooltip--large" data-mdl-for="{{device.model}}">{{device.name}}</div>
+          {% endif %}
+          {% endfor %}
+          </div>
+        </div>
+        {% endfor %}
+      </nav>
+    </div>
+    <main class="mdl-layout__content">
+      <div class="page-content">
         {% block content %}
         {% endblock %}
-        </main>
-        <footer class="page-footer">
-          <div class="container">
-            <div class="row">
-              <div class="col l12 s12">
-                  {% if not changelog %}
-                  <p class="grey-text text-lighten-4">Note: md5sums are provided to verify the file download was successful. If you'd like to verify the file has not been tampered with, check its signature instead. More information on how to do this can be found <a class="grey-text text-lighten-2" href="http://wiki.lineageos.org/verifying-builds.html">here</a>.</p>
-                  {% endif %}
-              </div>
-            </div>
-          </div>
-          <div class="footer-copyright">
-            <div class="container">
-            © 2017 LineageOS. Licensed under Apache 2.0.
-            <a class="grey-text text-lighten-4 right" href="https://github.com/lineageos/lineageos_updater">Source</a>
-            </div>
-          </div>
-        </footer>
-        <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
-        {% block script %}
-        {% endblock %}
-        <script type="text/javascript">
-            $(".button-collapse").sideNav();
-        </script>
-    </body>
+      </div>
+    </main>
+   
+  </div>
+</body>
 </html>
-
 

@@ -25,6 +25,9 @@ with open('device_deps.json') as f:
 is_qcom = {}
 
 def is_related_change(gerrit, device, curbranch, project, branch):
+    # We will not filter anything for now, just show all
+    return True
+
     if not ('/android_' in project or '-kernel-' in project):
         return False
 
@@ -76,7 +79,7 @@ def is_related_change(gerrit, device, curbranch, project, branch):
 def get_timestamp(ts):
     return int((ts - datetime(1970, 1, 1)).total_seconds())
 
-def get_changes(gerrit, device=None, before=-1, version='14.1'):
+def get_changes(gerrit, device=None, before=-1, version='7.1'):
     last_release = -1
 
     query = 'status:merged'

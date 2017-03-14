@@ -1,4 +1,4 @@
-from mongoengine import Document, BooleanField, DateTimeField, StringField
+from mongoengine import Document, BooleanField, DateTimeField, StringField, IntField
 
 from datetime import datetime, timedelta
 
@@ -13,9 +13,10 @@ class Rom(Document):
     romtype = StringField(required=True)
     md5sum = StringField(required=True)
     url = StringField()
+    installs = IntField(required=False, default=0)
 
     @classmethod
-    def get_roms(cls, device, romtype=None, before=3600):
+    def get_roms(cls, device=None, romtype=None, before=3600):
         args = {
             'device': device,
             'romtype': romtype,
@@ -25,6 +26,8 @@ class Rom(Document):
             del args['datetime__lt']
         if not romtype:
             del args['romtype']
+        if not device:
+            del args['device']
         return cls.objects(**args).order_by('-datetime')
 
     @classmethod
