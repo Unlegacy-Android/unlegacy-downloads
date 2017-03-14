@@ -31,7 +31,7 @@ class GerritJSONEncoder(JSONEncoder):
 def parse_gerrit_datetime(d):
     if d is None:
         return None
-    return datetime.strptime(d, "%Y-%m-%d %H:%M:%S.000000000")
+    return datetime.strptime(d, "%Y-%m-%d %H:%M:%S.%f000")
 
 def datetime_to_gerrit(d):
     return d.strftime('"%Y-%m-%d %H:%M:%S"')

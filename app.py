@@ -17,7 +17,7 @@ import requests
 import sys
 import time
 
-os.environ['TZ'] = 'UTC'
+os.environ['TZ'] = 'GMT'
 
 app = Flask(__name__)
 app.config.from_pyfile('app.cfg')
